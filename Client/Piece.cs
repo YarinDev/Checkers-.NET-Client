@@ -29,6 +29,15 @@ namespace Client
                 {
                     if (Piece_taken != null && TakePieceMove[0] == Move[0] && TakePieceMove[1] == Move[1])
                     {
+                        //making the actual eating
+                        if (Board[Piece_taken[0], Piece_taken[1]].Colour == 1)
+                        {
+                            Form2.computerScore++;
+                        }
+                        else
+                        {
+                            Form2.playerScore++;
+                        }
                         Board[Piece_taken[0], Piece_taken[1]] = null;
                         Piece_taken = null;
                     }
@@ -47,6 +56,7 @@ namespace Client
             List<int[]> PossibleMoves = new List<int[]>();
             int[] move;
 
+            //Black checker
             if (Board[X, Y].Colour == 0)
             {
                 //if black checker way to - down and left is possible on board
@@ -58,6 +68,7 @@ namespace Client
                         PossibleMoves.Add(move);
                     }
 
+                    //possible to make an eat move
                     else if (Y - 2 >= 0 && X + 2 < 8)
                     {
                         if (Board[X + 2, Y - 2] == null && Board[X + 1, Y - 1].Colour == 1)
@@ -65,6 +76,7 @@ namespace Client
                             move = new int[] { X + 2, Y - 2 };
                             PossibleMoves.Add(move);
 
+                            //pointing to the actual eating
                             Piece_taken = new int[] { X + 1, Y - 1 };
                             TakePieceMove = new int[] { X + 2, Y - 2 };
                         }
@@ -79,6 +91,7 @@ namespace Client
                         PossibleMoves.Add(move);
                     }
 
+                    //possible to make an eat move
                     else if (Y + 2 < 8 && X + 2 < 8)
                     {
                         if (Board[X + 2, Y + 2] == null && Board[X + 1, Y + 1].Colour == 1)
@@ -92,7 +105,7 @@ namespace Client
                     }
                 }
             }
-
+            //White checker
             else if (Board[X, Y].Colour == 1)
             {
                 //if white checker way to - up and left is possible on board
@@ -104,6 +117,7 @@ namespace Client
                         PossibleMoves.Add(move);
                     }
 
+                    //possible to make an eat move
                     else if (Y - 2 >= 0 && X - 2 >= 0)
                     {
                         if (Board[X - 2, Y - 2] == null && Board[X - 1, Y - 1].Colour == 0)
@@ -111,6 +125,7 @@ namespace Client
                             move = new int[] { X - 2, Y - 2 };
                             PossibleMoves.Add(move);
 
+                            //pointing to the actual eating
                             Piece_taken = new int[] { X - 1, Y - 1 };
                             TakePieceMove = new int[] { X - 2, Y - 2 };
                         }
@@ -125,6 +140,7 @@ namespace Client
                         PossibleMoves.Add(move);
                     }
 
+                    //possible to make an eat move
                     else if (Y + 2 < 8 && X - 2 >= 0)
                     {
                         if (Board[X - 2, Y + 2] == null && Board[X - 1, Y + 1].Colour == 0)
