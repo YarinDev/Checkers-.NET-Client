@@ -33,6 +33,8 @@ namespace Client
         private int chosenCheckerIndex;
         public static int playerScore = 0;
         public static int computerScore = 0;
+        private int[] checkerLocation;
+        private int[] moveToLocation;
 
 
         public Form2()
@@ -103,7 +105,7 @@ namespace Client
         //happens when user is clicking on one of the board's squares, if the square is empty it means board[x,y] is null.
         private async void ClickAsync(object sender, EventArgs e)
         {
-           
+
 
 
             Button Btn = (Button)sender;
@@ -178,17 +180,26 @@ namespace Client
                     locations = GetBlackCheckersLocations();
                     blackCheckersLocationAndMoves = GetPossibleBlackMoves(locations);
                     blacksWithMovesIndexes = onlyBlackWithMoves(blackCheckersLocationAndMoves);
-/*                    Console.WriteLine("player num is: " + p1.Num);
-*/
+                    /*                    Console.WriteLine("player num is: " + p1.Num);
+                    */
                     //sending get request for server to get random num for making a random move.
                     await getPlayerWithRandAsync((int)blacksWithMovesIndexes.Count);
-/*                    Console.WriteLine("player num is: " + p1.Num);
-*/                    //setting up the random move.
-                    chosenCheckerIndex = blacksWithMovesIndexes.ElementAt(p1.Num);
-                    int[] checkerLocation = locations.ElementAt(chosenCheckerIndex);
-                    int[] moveToLocation = blackCheckersLocationAndMoves.ElementAt(chosenCheckerIndex).ElementAt(0);
-/*                    Console.WriteLine("Random Number from server after genrate random in range is: " + p1.Num);
-*/                    Board = Piece.Move(Board, checkerLocation[0], checkerLocation[1], moveToLocation[0], moveToLocation[1]);
+                    /*                    Console.WriteLine("player num is: " + p1.Num);
+                    */                  //setting up the random move.
+                    try
+                    {
+                        chosenCheckerIndex = blacksWithMovesIndexes.ElementAt(p1.Num);
+                        checkerLocation = locations.ElementAt(chosenCheckerIndex);
+                        moveToLocation = blackCheckersLocationAndMoves.ElementAt(chosenCheckerIndex).ElementAt(0);
+                        Board = Piece.Move(Board, checkerLocation[0], checkerLocation[1], moveToLocation[0], moveToLocation[1]);
+                    }
+                    catch (ArgumentOutOfRangeException ex)
+                    {
+                        Console.WriteLine("argument exeption");
+                    
+                    }
+                    /*                    Console.WriteLine("Random Number from server after genrate random in range is: " + p1.Num);
+                    */
                     UpdatePiecesTaken();
                     SetUpColours();
                     ShowPieces();
@@ -467,8 +478,8 @@ namespace Client
                     blacksWithMoves.Add(blackCheckersLocationsAndMoves.IndexOf(black));
                 }
             }
-/*            Console.WriteLine(String.Join("; ", blacksWithMoves));  // "1; 2; 3"
-*/
+            /*            Console.WriteLine(String.Join("; ", blacksWithMoves));  // "1; 2; 3"
+            */
             return blacksWithMoves;
         }
 
