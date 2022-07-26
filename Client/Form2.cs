@@ -23,14 +23,17 @@ namespace Client
         private HttpClient client = new HttpClient();
         Random r = new Random();
         Player p1 = new Player();
+        Game game = new Game();
         Player p2 = new Player();
+        Stopwatch stopWatch = new Stopwatch();
+
         int id;
         private Boolean computersTurn = false;
         private Boolean firstTime = false;
         private List<int[]> locations;
         private List<List<int[]>> blackCheckersLocationAndMoves;
         private List<int> blacksWithMovesIndexes;
-        private int chosenCheckerIndex;
+        private int chosenCheckerIndex = 0;
         public static int playerScore = 0;
         public static int computerScore = 0;
         private int[] checkerLocation;
@@ -59,6 +62,10 @@ namespace Client
             p1.Name = player.Name;
             p1.Phone = player.Phone;
             p1.Num = player.Num;
+            game.UserId = player.Id;
+            game.Date = DateTime.Now;
+            stopWatch.Start();
+
 
         }
 
@@ -105,6 +112,7 @@ namespace Client
         //happens when user is clicking on one of the board's squares, if the square is empty it means board[x,y] is null.
         private async void ClickAsync(object sender, EventArgs e)
         {
+            endGame();
 
 
 
@@ -186,6 +194,8 @@ namespace Client
                     await getPlayerWithRandAsync((int)blacksWithMovesIndexes.Count);
                     /*                    Console.WriteLine("player num is: " + p1.Num);
                     */                  //setting up the random move.
+
+
                     try
                     {
                         chosenCheckerIndex = blacksWithMovesIndexes.ElementAt(p1.Num);
@@ -193,11 +203,13 @@ namespace Client
                         moveToLocation = blackCheckersLocationAndMoves.ElementAt(chosenCheckerIndex).ElementAt(0);
                         Board = Piece.Move(Board, checkerLocation[0], checkerLocation[1], moveToLocation[0], moveToLocation[1]);
                     }
-                    catch (ArgumentOutOfRangeException ex)
+                    catch (Exception ex)
                     {
-                        Console.WriteLine("argument exeption");
-                    
+                        MessageBox.Show(ex.Message);
+                        //end game method.
+                        endGame();
                     }
+
                     /*                    Console.WriteLine("Random Number from server after genrate random in range is: " + p1.Num);
                     */
                     UpdatePiecesTaken();
@@ -211,6 +223,40 @@ namespace Client
 
         }
 
+        private async void endGame()
+        {
+            stopWatch.Stop();
+            // Get the elapsed time as a TimeSpan value.
+            TimeSpan ts = stopWatch.Elapsed;
+            game.Length = (int)ts.TotalSeconds;
+            if (playerScore >= computerScore)
+            {
+                game.Winner = p1.Name;
+                MessageBox.Show(p1.Name + " won!");
+                await CreateGameOnServer(game);
+
+            }
+            else
+            {
+                game.Winner = "Computer";
+                MessageBox.Show("Computer won!");
+                await CreateGameOnServer(game);
+
+            }
+        }
+        private async Task CreateGameOnServer(Game game)
+        {
+            Uri response = await CreateGameAsync(game);
+        }
+        async Task<Uri> CreateGameAsync(Game game)
+        {
+            HttpResponseMessage response = await client.PostAsJsonAsync(
+                "https://localhost:44310/api/TblGames", game);
+            response.EnsureSuccessStatusCode();
+
+            // return URI of the created resource.
+            return response.Headers.Location;
+        }
         async Task<Player> GetPlayerAsync(string path)
         {
             var formatters = new List<MediaTypeFormatter>() {
