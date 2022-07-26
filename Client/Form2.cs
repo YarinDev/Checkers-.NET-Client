@@ -26,6 +26,7 @@ namespace Client
         Game game = new Game();
         Player p2 = new Player();
         Stopwatch stopWatch = new Stopwatch();
+        private List<int[]> allGameMoves = new List<int[]>();
 
         int id;
         private Boolean computersTurn = false;
@@ -112,7 +113,7 @@ namespace Client
         //happens when user is clicking on one of the board's squares, if the square is empty it means board[x,y] is null.
         private async void ClickAsync(object sender, EventArgs e)
         {
-            endGame();
+            //endGame();
 
 
 
@@ -177,6 +178,8 @@ namespace Client
                     to_y = y;
 
                     Board = Piece.Move(Board, from_x, from_y, to_x, to_y);
+                    int[] playerMove = { from_x, from_y, to_x, to_y };
+                    allGameMoves.Add(playerMove);
                     selected = false;
 
                     UpdatePiecesTaken();
@@ -202,6 +205,8 @@ namespace Client
                         checkerLocation = locations.ElementAt(chosenCheckerIndex);
                         moveToLocation = blackCheckersLocationAndMoves.ElementAt(chosenCheckerIndex).ElementAt(0);
                         Board = Piece.Move(Board, checkerLocation[0], checkerLocation[1], moveToLocation[0], moveToLocation[1]);
+                        int[] computerMove = { checkerLocation[0], checkerLocation[1], moveToLocation[0], moveToLocation[1] };
+                        allGameMoves.Add(computerMove);
                     }
                     catch (Exception ex)
                     {
@@ -234,6 +239,8 @@ namespace Client
                 game.Winner = p1.Name;
                 MessageBox.Show(p1.Name + " won!");
                 await CreateGameOnServer(game);
+                //get most recent game GameId
+                //post new game in client DB with GameId And list of all moves
 
             }
             else
