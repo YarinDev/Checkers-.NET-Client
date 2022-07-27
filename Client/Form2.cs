@@ -113,7 +113,7 @@ namespace Client
         //happens when user is clicking on one of the board's squares, if the square is empty it means board[x,y] is null.
         private async void ClickAsync(object sender, EventArgs e)
         {
-            //endGame();
+            endGame();
 
 
 
@@ -239,7 +239,9 @@ namespace Client
                 game.Winner = p1.Name;
                 MessageBox.Show(p1.Name + " won!");
                 await CreateGameOnServer(game);
+
                 //get most recent game GameId
+                await LastGameIdAsync();
                 //post new game in client DB with GameId And list of all moves
 
             }
@@ -248,9 +250,34 @@ namespace Client
                 game.Winner = "Computer";
                 MessageBox.Show("Computer won!");
                 await CreateGameOnServer(game);
-
+                //get most recent game GameId
+                await LastGameIdAsync();
+                //post new game in client DB with GameId And list of all moves
             }
         }
+        private async Task LastGameIdAsync()
+        {
+            game = await GetLastGameAsync("https://localhost:44310/api/TblGames/getlast/1");
+
+        }
+        async Task<Game> GetLastGameAsync(string path)
+        {
+            var formatters = new List<MediaTypeFormatter>() {
+    new JsonMediaTypeFormatter(),
+    new XmlMediaTypeFormatter()
+};
+
+            HttpResponseMessage response = await client.GetAsync(path);
+            if (response.IsSuccessStatusCode)
+            {
+                game = await response.Content.ReadAsAsync<Game>(formatters);
+
+            }
+
+            return game;
+        }
+
+
         private async Task CreateGameOnServer(Game game)
         {
             Uri response = await CreateGameAsync(game);
