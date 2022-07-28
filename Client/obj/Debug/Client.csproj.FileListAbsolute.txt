@@ -15,3 +15,5 @@ C:\Users\yarin\source\repos\Client\Client\obj\Debug\Client.csproj.CopyComplete
 C:\Users\yarin\source\repos\Client\Client\obj\Debug\Client.exe
 C:\Users\yarin\source\repos\Client\Client\obj\Debug\Client.pdb
 C:\Users\yarin\source\repos\Client\Client\obj\Debug\Client.Form2.resources
+C:\Users\yarin\source\repos\Client\Client\bin\Debug\MYDB.mdf
+C:\Users\yarin\source\repos\Client\Client\bin\Debug\MYDB_log.ldf

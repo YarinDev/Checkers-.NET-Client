@@ -26,7 +26,8 @@ namespace Client
         Game game = new Game();
         Player p2 = new Player();
         Stopwatch stopWatch = new Stopwatch();
-        private List<int[]> allGameMoves = new List<int[]>();
+        private List<String> allGameMoves = new List<String>();
+        
 
         int id;
         private Boolean computersTurn = false;
@@ -113,7 +114,7 @@ namespace Client
         //happens when user is clicking on one of the board's squares, if the square is empty it means board[x,y] is null.
         private async void ClickAsync(object sender, EventArgs e)
         {
-            endGame();
+           endGame();
 
 
 
@@ -178,8 +179,11 @@ namespace Client
                     to_y = y;
 
                     Board = Piece.Move(Board, from_x, from_y, to_x, to_y);
-                    int[] playerMove = { from_x, from_y, to_x, to_y };
-                    allGameMoves.Add(playerMove);
+                    //String[] playerMove = { from_x.ToString(), from_y.ToString(), to_x.ToString(), to_y.ToString() };
+                    allGameMoves.Add(from_x.ToString());
+                    allGameMoves.Add(from_y.ToString());
+                    allGameMoves.Add(to_x.ToString());
+                    allGameMoves.Add(to_y.ToString());
                     selected = false;
 
                     UpdatePiecesTaken();
@@ -205,8 +209,11 @@ namespace Client
                         checkerLocation = locations.ElementAt(chosenCheckerIndex);
                         moveToLocation = blackCheckersLocationAndMoves.ElementAt(chosenCheckerIndex).ElementAt(0);
                         Board = Piece.Move(Board, checkerLocation[0], checkerLocation[1], moveToLocation[0], moveToLocation[1]);
-                        int[] computerMove = { checkerLocation[0], checkerLocation[1], moveToLocation[0], moveToLocation[1] };
-                        allGameMoves.Add(computerMove);
+                        //  String[] computerMove = { checkerLocation[0].ToString(), checkerLocation[1].ToString(), moveToLocation[0].ToString(), moveToLocation[1].ToString() };
+                        allGameMoves.Add(checkerLocation[0].ToString());
+                        allGameMoves.Add(checkerLocation[1].ToString());
+                        allGameMoves.Add(moveToLocation[0].ToString());
+                        allGameMoves.Add(moveToLocation[1].ToString());
                     }
                     catch (Exception ex)
                     {
@@ -230,20 +237,28 @@ namespace Client
 
         private async void endGame()
         {
+            GamesDataContext dbgm = new GamesDataContext();
+            TableGames tg = new TableGames();
+
             stopWatch.Stop();
             // Get the elapsed time as a TimeSpan value.
             TimeSpan ts = stopWatch.Elapsed;
             game.Length = (int)ts.TotalSeconds;
+            string str = String.Join(", ", allGameMoves);
+            Console.WriteLine(str);
             if (playerScore >= computerScore)
             {
                 game.Winner = p1.Name;
+                Console.WriteLine("koko");
+
                 MessageBox.Show(p1.Name + " won!");
                 await CreateGameOnServer(game);
 
                 //get most recent game GameId
                 await LastGameIdAsync();
                 //post new game in client DB with GameId And list of all moves
-
+                tg.GameId = game.GameId;
+                tg.Moves = str;
             }
             else
             {
@@ -253,7 +268,13 @@ namespace Client
                 //get most recent game GameId
                 await LastGameIdAsync();
                 //post new game in client DB with GameId And list of all moves
+                tg.GameId = game.GameId;
+                tg.Moves = str;
             }
+            dbgm.TableGames.InsertOnSubmit(tg);
+            dbgm.SubmitChanges();
+
+
         }
         private async Task LastGameIdAsync()
         {
