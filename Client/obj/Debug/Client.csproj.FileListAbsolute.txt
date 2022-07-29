@@ -1,12 +1,11 @@
-C:\Users\yarin\source\repos\Client\Client\bin\Debug\Client.exe.config
-C:\Users\yarin\source\repos\Client\Client\bin\Debug\Client.exe
-C:\Users\yarin\source\repos\Client\Client\bin\Debug\Client.pdb
+C:\Users\yarin\source\repos\Client\Client\bin\Debug\MYDB.mdf
+C:\Users\yarin\source\repos\Client\Client\bin\Debug\MYDB_log.ldf
 C:\Users\yarin\source\repos\Client\Client\bin\Debug\Newtonsoft.Json.dll
 C:\Users\yarin\source\repos\Client\Client\bin\Debug\System.Net.Http.Formatting.dll
 C:\Users\yarin\source\repos\Client\Client\bin\Debug\Newtonsoft.Json.xml
 C:\Users\yarin\source\repos\Client\Client\bin\Debug\System.Net.Http.Formatting.xml
-C:\Users\yarin\source\repos\Client\Client\obj\Debug\Client.csproj.AssemblyReference.cache
 C:\Users\yarin\source\repos\Client\Client\obj\Debug\Client.Form1.resources
+C:\Users\yarin\source\repos\Client\Client\obj\Debug\Client.Form2.resources
 C:\Users\yarin\source\repos\Client\Client\obj\Debug\Client.Properties.Resources.resources
 C:\Users\yarin\source\repos\Client\Client\obj\Debug\Client.StartGame.resources
 C:\Users\yarin\source\repos\Client\Client\obj\Debug\Client.csproj.GenerateResource.cache
@@ -14,6 +13,7 @@ C:\Users\yarin\source\repos\Client\Client\obj\Debug\Client.csproj.CoreCompileInp
 C:\Users\yarin\source\repos\Client\Client\obj\Debug\Client.csproj.CopyComplete
 C:\Users\yarin\source\repos\Client\Client\obj\Debug\Client.exe
 C:\Users\yarin\source\repos\Client\Client\obj\Debug\Client.pdb
-C:\Users\yarin\source\repos\Client\Client\obj\Debug\Client.Form2.resources
-C:\Users\yarin\source\repos\Client\Client\bin\Debug\MYDB.mdf
-C:\Users\yarin\source\repos\Client\Client\bin\Debug\MYDB_log.ldf
+C:\Users\yarin\source\repos\Client\Client\bin\Debug\Client.exe.config
+C:\Users\yarin\source\repos\Client\Client\bin\Debug\Client.exe
+C:\Users\yarin\source\repos\Client\Client\bin\Debug\Client.pdb
+C:\Users\yarin\source\repos\Client\Client\obj\Debug\Client.csproj.AssemblyReference.cache

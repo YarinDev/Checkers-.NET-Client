@@ -21,17 +21,15 @@ namespace Client
     public partial class Form2 : Form
     {
         private HttpClient client = new HttpClient();
-        Random r = new Random();
         Player p1 = new Player();
         Game game = new Game();
-        Player p2 = new Player();
         Stopwatch stopWatch = new Stopwatch();
         private List<String> allGameMoves = new List<String>();
-        
+        GamesDataContext dbgm = new GamesDataContext();
+        TableGames tg = new TableGames();
+        TableGames tg2 = new TableGames();
 
-        int id;
-        private Boolean computersTurn = false;
-        private Boolean firstTime = false;
+
         private List<int[]> locations;
         private List<List<int[]>> blackCheckersLocationAndMoves;
         private List<int> blacksWithMovesIndexes;
@@ -59,7 +57,6 @@ namespace Client
         }
         public void initalizePlayer(Player player)
         {
-
             p1.Id = player.Id;
             p1.Name = player.Name;
             p1.Phone = player.Phone;
@@ -67,8 +64,6 @@ namespace Client
             game.UserId = player.Id;
             game.Date = DateTime.Now;
             stopWatch.Start();
-
-
         }
 
         protected override void OnLoad(EventArgs e)
@@ -91,6 +86,27 @@ namespace Client
         private Boolean selected = false;
         private int[] Piece_Selected;
 
+        private async Task GamePlayback(int gameIdForPlayback)
+        {
+            gameIdForPlayback = 3003;
+            //get back client (exampe of GameId 3003) GameId and Moves
+            tg2 = dbgm.TableGames.Where(game => game.GameId == gameIdForPlayback).Single();
+            Console.WriteLine(tg2.GameId + " " + tg2.Moves);
+
+            List<int> Moves = tg2.Moves.Split(',').Select(int.Parse).ToList();
+            int numberOfSteps = Moves.Count / 4;
+            int counter = 0;
+            for (int i = 0; i < numberOfSteps; i++)
+            {
+                await Task.Delay(500);
+                Board = Piece.Move(Board, Moves[counter], Moves[counter + 1], Moves[counter + 2], Moves[counter + 3]);
+                UpdatePiecesTaken();
+                SetUpColours();
+                ShowPieces();
+                counter += 4;
+            }
+
+        }
 
         private void Initialize()
         {
@@ -103,20 +119,15 @@ namespace Client
 
             ImagesB[0].BackgroundImage = Properties.Resources.CheckerBlack1;
         }
-        private void moveExample()
-        {
 
-            Board = Piece.Move(Board, 2, 3, 3, 2);
-            UpdatePiecesTaken();
-            SetUpColours();
-            ShowPieces();
-        }
+
         //happens when user is clicking on one of the board's squares, if the square is empty it means board[x,y] is null.
         private async void ClickAsync(object sender, EventArgs e)
         {
-           endGame();
 
+            GamePlayback();
 
+            // endGame();
 
             Button Btn = (Button)sender;
             int x, y;
@@ -125,35 +136,13 @@ namespace Client
             x = Convert.ToInt16(Btn.Name[3]) - 48;
             y = Convert.ToInt16(Btn.Name[4]) - 48;
 
-            /* if (firstTime != false)
-             {
-                 *//*locations = GetBlackCheckersLocations();
-                 blackCheckersLocationAndMoves = GetPossibleBlackMoves(locations);
-                 blacksWithMovesIndexes = onlyBlackWithMoves(blackCheckersLocationAndMoves);*//*
-                 try
-                 {
-                    chosenCheckerIndex = blacksWithMovesIndexes.ElementAt(p1.Num);
-                 }
-                 catch (ArgumentOutOfRangeException)
-                 {
-                     Console.Write("white checkers player won!");
-                 }
-                 int[] checkerLocation = locations.ElementAt(chosenCheckerIndex);
-                 int[] moveToLocation = blackCheckersLocationAndMoves.ElementAt(chosenCheckerIndex).ElementAt(0);
-                 Console.WriteLine("Random Number from server after genrate random in range is: " + p1.Num);
-                 Board = Piece.Move(Board, checkerLocation[0], checkerLocation[1], moveToLocation[0], moveToLocation[1]);
-                 UpdatePiecesTaken();
-                 SetUpColours();
-                 ShowPieces();
-                 firstTime = false;
-             }*/
-
             //if i have selected to move the same place i stand.
             if (selected && Piece_Selected[0] == x && Piece_Selected[1] == y)
             {
                 selected = false;
                 SetUpColours();
             }
+
             //if i have selected checker only(before selecting the move). than highlight the possible moves.
             else if (!selected)
             {
@@ -165,6 +154,7 @@ namespace Client
                     Highlightpossiblemoves();
                 }
             }
+
             //if i have selected a place to move
             else if (selected)
             {
@@ -195,13 +185,9 @@ namespace Client
                     locations = GetBlackCheckersLocations();
                     blackCheckersLocationAndMoves = GetPossibleBlackMoves(locations);
                     blacksWithMovesIndexes = onlyBlackWithMoves(blackCheckersLocationAndMoves);
-                    /*                    Console.WriteLine("player num is: " + p1.Num);
-                    */
+
                     //sending get request for server to get random num for making a random move.
                     await getPlayerWithRandAsync((int)blacksWithMovesIndexes.Count);
-                    /*                    Console.WriteLine("player num is: " + p1.Num);
-                    */                  //setting up the random move.
-
 
                     try
                     {
@@ -209,7 +195,7 @@ namespace Client
                         checkerLocation = locations.ElementAt(chosenCheckerIndex);
                         moveToLocation = blackCheckersLocationAndMoves.ElementAt(chosenCheckerIndex).ElementAt(0);
                         Board = Piece.Move(Board, checkerLocation[0], checkerLocation[1], moveToLocation[0], moveToLocation[1]);
-                        //  String[] computerMove = { checkerLocation[0].ToString(), checkerLocation[1].ToString(), moveToLocation[0].ToString(), moveToLocation[1].ToString() };
+
                         allGameMoves.Add(checkerLocation[0].ToString());
                         allGameMoves.Add(checkerLocation[1].ToString());
                         allGameMoves.Add(moveToLocation[0].ToString());
@@ -222,8 +208,6 @@ namespace Client
                         endGame();
                     }
 
-                    /*                    Console.WriteLine("Random Number from server after genrate random in range is: " + p1.Num);
-                    */
                     UpdatePiecesTaken();
                     SetUpColours();
                     ShowPieces();
@@ -237,8 +221,7 @@ namespace Client
 
         private async void endGame()
         {
-            GamesDataContext dbgm = new GamesDataContext();
-            TableGames tg = new TableGames();
+
 
             stopWatch.Stop();
             // Get the elapsed time as a TimeSpan value.
@@ -256,9 +239,6 @@ namespace Client
 
                 //get most recent game GameId
                 await LastGameIdAsync();
-                //post new game in client DB with GameId And list of all moves
-                tg.GameId = game.GameId;
-                tg.Moves = str;
             }
             else
             {
@@ -267,12 +247,19 @@ namespace Client
                 await CreateGameOnServer(game);
                 //get most recent game GameId
                 await LastGameIdAsync();
-                //post new game in client DB with GameId And list of all moves
-                tg.GameId = game.GameId;
-                tg.Moves = str;
+
             }
+            //post new game in client DB with GameId And list of all moves
+            tg.GameId = game.GameId;
+            tg.Moves = str;
             dbgm.TableGames.InsertOnSubmit(tg);
             dbgm.SubmitChanges();
+            //get back client (exampe of first game) GameId and Moves
+            tg2 = dbgm.TableGames.ToList().ElementAt(0);
+            Console.WriteLine(tg2.GameId + " " + tg2.Moves);
+            var combined = string.Join(", ", dbgm.TableGames.ToList());
+            Console.WriteLine(combined);
+
 
 
         }
@@ -329,33 +316,11 @@ namespace Client
 
             return p1;
         }
-        private async void getUpdatedPlayer()
-        {
-            p1 = await GetPlayerAsync("https://localhost:44310/api/TblUsers/" + p1.Id);
-
-        }
-
         private async Task getPlayerWithRandAsync(int num)
         {
             await Task.Delay(500);
             p1 = await GetPlayerAsync("https://localhost:44310/api/TblUsers/pname/1/" + num);
 
-        }
-        private async void SendBlacksCount(int num)
-
-        {
-            p1.Num = num;
-            await UpdatePlayerAsync(p1);
-        }
-        async Task<Player> UpdatePlayerAsync(Player player)
-        {
-            HttpResponseMessage response = await client.PutAsJsonAsync(
-                $"https://localhost:44310/api/TblUsers/{player.Id}", player);
-            response.EnsureSuccessStatusCode();
-
-            // Deserialize the updated product from the response body.
-            player = await response.Content.ReadAsAsync<Player>();
-            return player;
         }
         public void printArray<T>(IEnumerable<T> a)
         {
@@ -579,10 +544,16 @@ namespace Client
                     blacksWithMoves.Add(blackCheckersLocationsAndMoves.IndexOf(black));
                 }
             }
-            /*            Console.WriteLine(String.Join("; ", blacksWithMoves));  // "1; 2; 3"
-            */
+
             return blacksWithMoves;
         }
+        private void moveExample()
+        {
 
+            Board = Piece.Move(Board, 2, 3, 3, 2);
+            UpdatePiecesTaken();
+            SetUpColours();
+            ShowPieces();
+        }
     }
 }
