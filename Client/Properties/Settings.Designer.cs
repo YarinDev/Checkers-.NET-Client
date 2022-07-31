@@ -26,11 +26,23 @@ namespace Client.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\\MYDB.mdf;Inte" +
-            "grated Security=True")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\Users\\yarin\\source\\repos\\C" +
+            "lient\\Client\\MYDB.mdf;Integrated Security=True")]
         public string MYDBConnectionString {
             get {
                 return ((string)(this["MYDBConnectionString"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=C:\\USERS\\YARIN\\SOURCE\\REPOS\\CL" +
+            "IENT\\CLIENT\\MYDB.MDF;Integrated Security=True;Connect Timeout=30;Encrypt=False;T" +
+            "rustServerCertificate=False")]
+        public string C__USERS_YARIN_SOURCE_REPOS_CLIENT_CLIENT_MYDB_MDFConnectionString {
+            get {
+                return ((string)(this["C__USERS_YARIN_SOURCE_REPOS_CLIENT_CLIENT_MYDB_MDFConnectionString"]));
             }
         }
     }

@@ -1,9 +1,10 @@
-﻿<?xml version="1.0" encoding="utf-8"?><Database Name="MYDB" Class="GamesDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="AppSettings" ConnectionString="Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\MYDB.mdf;Integrated Security=True" SettingsObjectName="Client.Properties.Settings" SettingsPropertyName="MYDBConnectionString" Provider="System.Data.SqlClient" />
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="C:\USERS\YARIN\SOURCE\REPOS\CLIENT\CLIENT\MYDB.MDF" Class="GamesDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=C:\USERS\YARIN\SOURCE\REPOS\CLIENT\CLIENT\MYDB.MDF;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False" SettingsObjectName="Client.Properties.Settings" SettingsPropertyName="C__USERS_YARIN_SOURCE_REPOS_CLIENT_CLIENT_MYDB_MDFConnectionString" Provider="System.Data.SqlClient" />
   <Table Name="dbo.TableGames" Member="TableGames">
     <Type Name="TableGames">
       <Column Name="GameId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="Moves" Type="System.String" DbType="NVarChar(2000) NOT NULL" CanBeNull="false" />
+      <Column Name="UserId" Type="System.Int32" DbType="Int" CanBeNull="true" />
     </Type>
   </Table>
 </Database>

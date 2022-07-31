@@ -50,7 +50,7 @@ namespace Client
         private void button2_Click(object sender, EventArgs e)
         {
             PlaybacksMenu playbacksMenu = new PlaybacksMenu();
-           // playbacksMenu.initalizePlayer(p1);
+            playbacksMenu.initalizePlayer(p1);
             playbacksMenu.Show();
         }
 

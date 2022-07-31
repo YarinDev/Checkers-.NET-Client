@@ -22,7 +22,7 @@ namespace Client
 	using System;
 	
 	
-	[global::System.Data.Linq.Mapping.DatabaseAttribute(Name="MYDB")]
+	[global::System.Data.Linq.Mapping.DatabaseAttribute(Name="C:\\USERS\\YARIN\\SOURCE\\REPOS\\CLIENT\\CLIENT\\MYDB.MDF")]
 	public partial class GamesDataContext : System.Data.Linq.DataContext
 	{
 		
@@ -36,7 +36,7 @@ namespace Client
     #endregion
 		
 		public GamesDataContext() : 
-				base(global::Client.Properties.Settings.Default.MYDBConnectionString, mappingSource)
+				base(global::Client.Properties.Settings.Default.C__USERS_YARIN_SOURCE_REPOS_CLIENT_CLIENT_MYDB_MDFConnectionString, mappingSource)
 		{
 			OnCreated();
 		}
@@ -84,6 +84,8 @@ namespace Client
 		
 		private string _Moves;
 		
+		private System.Nullable<int> _UserId;
+		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -92,6 +94,8 @@ namespace Client
     partial void OnGameIdChanged();
     partial void OnMovesChanging(string value);
     partial void OnMovesChanged();
+    partial void OnUserIdChanging(System.Nullable<int> value);
+    partial void OnUserIdChanged();
     #endregion
 		
 		public TableGames()
@@ -135,6 +139,26 @@ namespace Client
 					this._Moves = value;
 					this.SendPropertyChanged("Moves");
 					this.OnMovesChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserId", DbType="Int")]
+		public System.Nullable<int> UserId
+		{
+			get
+			{
+				return this._UserId;
+			}
+			set
+			{
+				if ((this._UserId != value))
+				{
+					this.OnUserIdChanging(value);
+					this.SendPropertyChanging();
+					this._UserId = value;
+					this.SendPropertyChanged("UserId");
+					this.OnUserIdChanged();
 				}
 			}
 		}

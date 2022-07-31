@@ -86,9 +86,8 @@ namespace Client
         private Boolean selected = false;
         private int[] Piece_Selected;
 
-        private async Task GamePlayback(int gameIdForPlayback)
+        public async Task GamePlayback(int gameIdForPlayback)
         {
-            gameIdForPlayback = 3003;
             //get back client (exampe of GameId 3003) GameId and Moves
             tg2 = dbgm.TableGames.Where(game => game.GameId == gameIdForPlayback).Single();
             Console.WriteLine(tg2.GameId + " " + tg2.Moves);
@@ -252,6 +251,7 @@ namespace Client
             //post new game in client DB with GameId And list of all moves
             tg.GameId = game.GameId;
             tg.Moves = str;
+            tg.UserId = p1.Id;
             dbgm.TableGames.InsertOnSubmit(tg);
             dbgm.SubmitChanges();
             //get back client (exampe of first game) GameId and Moves
