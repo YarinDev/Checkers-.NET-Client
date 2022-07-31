@@ -32,11 +32,11 @@ namespace Client
                         //making the actual eating
                         if (Board[Piece_taken[0], Piece_taken[1]].Colour == 1)
                         {
-                            Form2.computerScore++;
+                            TheGame.computerScore++;
                         }
                         else
                         {
-                            Form2.playerScore++;
+                            TheGame.playerScore++;
                         }
                         Board[Piece_taken[0], Piece_taken[1]] = null;
                         Piece_taken = null;
