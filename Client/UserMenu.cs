@@ -25,6 +25,7 @@ namespace Client
         GamesDataContext dbgm = new GamesDataContext();
         TableGames tg = new TableGames();
         TableGames tg2 = new TableGames();
+
         public UserMenu()
         {
             InitializeComponent();
@@ -38,6 +39,7 @@ namespace Client
             game.UserId = player.Id;
             game.Date = DateTime.Now;
             stopWatch.Start();
+
         }
 
         private async void button1_Click(object sender, EventArgs e)
@@ -45,6 +47,8 @@ namespace Client
             TheGame theGame = new TheGame();
             theGame.initalizePlayer(p1);
             theGame.Show();
+            MessageBox.Show("Your Details:\n" + "Id Number: " + p1.Id + "\n" + "Name: " + p1.Name + "\n" + "Phone: " + p1.Phone);
+
         }
 
         private void button2_Click(object sender, EventArgs e)

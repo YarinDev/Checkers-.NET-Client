@@ -127,7 +127,7 @@ namespace Client
             }
             else
             {
-                MessageBox.Show("There is no user with the entered details!");
+                MessageBox.Show("There is no user with these details!\nPlease Try again.");
             }
         }
 

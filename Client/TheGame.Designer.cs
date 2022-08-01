@@ -1021,7 +1021,7 @@
             this.PicWhite11.TabStop = false;
             this.PicWhite11.Visible = false;
             // 
-            // Form1
+            // TheGame
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -1115,7 +1115,8 @@
             this.Controls.Add(this.btn01);
             this.Controls.Add(this.btn00);
             this.Margin = new System.Windows.Forms.Padding(4);
-            this.Name = "Form1";
+            this.Name = "TheGame";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Checkers";
             this.Load += new System.EventHandler(this.Form2_Load);
             ((System.ComponentModel.ISupportInitialize)(this.PicBlack7)).EndInit();
