@@ -79,7 +79,7 @@ namespace Client
         private PictureBox[] ImagesW = new PictureBox[12];
         private PictureBox[] ImagesB = new PictureBox[12];
 
-        private Color FirstColour = Color.Azure;
+        private Color FirstColour = Color.Cornsilk;
         private Color SecondColour = Color.Black;
         private Color SelectedColour = Color.Orange;
 
@@ -88,7 +88,6 @@ namespace Client
 
         public async Task GamePlayback(int gameIdForPlayback)
         {
-            //get back client (exampe of GameId 3003) GameId and Moves
             tg2 = dbgm.TableGames.Where(game => game.GameId == gameIdForPlayback).Single();
             Console.WriteLine(tg2.GameId + " " + tg2.Moves);
 

@@ -1,5 +1,4 @@
 C:\Users\yarin\source\repos\Client\Client\obj\Debug\Client.csproj.AssemblyReference.cache
-C:\Users\yarin\source\repos\Client\Client\obj\Debug\Client.Form1.resources
 C:\Users\yarin\source\repos\Client\Client\obj\Debug\Client.PlaybacksMenu.resources
 C:\Users\yarin\source\repos\Client\Client\obj\Debug\Client.TheGame.resources
 C:\Users\yarin\source\repos\Client\Client\obj\Debug\Client.UserMenu.resources
