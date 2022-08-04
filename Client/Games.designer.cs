@@ -22,7 +22,7 @@ namespace Client
 	using System;
 	
 	
-	[global::System.Data.Linq.Mapping.DatabaseAttribute(Name="C:\\USERS\\YARIN\\SOURCE\\REPOS\\CLIENT\\CLIENT\\MYDB.MDF")]
+	[global::System.Data.Linq.Mapping.DatabaseAttribute(Name="C:\\USERS\\YARIN\\SOURCE\\REPOS\\CLIENT\\CLIENT\\BIN\\DEBUG\\MYDB.MDF")]
 	public partial class GamesDataContext : System.Data.Linq.DataContext
 	{
 		
@@ -36,7 +36,7 @@ namespace Client
     #endregion
 		
 		public GamesDataContext() : 
-				base(global::Client.Properties.Settings.Default.C__USERS_YARIN_SOURCE_REPOS_CLIENT_CLIENT_MYDB_MDFConnectionString, mappingSource)
+				base(global::Client.Properties.Settings.Default.C__USERS_YARIN_SOURCE_REPOS_CLIENT_CLIENT_BIN_DEBUG_MYDB_MDFConnectionString, mappingSource)
 		{
 			OnCreated();
 		}

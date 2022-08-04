@@ -45,5 +45,17 @@ namespace Client.Properties {
                 return ((string)(this["C__USERS_YARIN_SOURCE_REPOS_CLIENT_CLIENT_MYDB_MDFConnectionString"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=C:\\USERS\\YARIN\\SOURCE\\REPOS\\CL" +
+            "IENT\\CLIENT\\BIN\\DEBUG\\MYDB.MDF;Integrated Security=True;Connect Timeout=30;Encry" +
+            "pt=False;TrustServerCertificate=False")]
+        public string C__USERS_YARIN_SOURCE_REPOS_CLIENT_CLIENT_BIN_DEBUG_MYDB_MDFConnectionString {
+            get {
+                return ((string)(this["C__USERS_YARIN_SOURCE_REPOS_CLIENT_CLIENT_BIN_DEBUG_MYDB_MDFConnectionString"]));
+            }
+        }
     }
 }

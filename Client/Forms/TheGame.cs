@@ -30,9 +30,12 @@ namespace Client
         TableGames tg2 = new TableGames();
 
 
-        private List<int[]> locations;
+        private List<int[]> blackLocations;
+        private List<int[]> whiteLocations;
         private List<List<int[]>> blackCheckersLocationAndMoves;
+        private List<List<int[]>> whiteCheckersLocationAndMoves;
         private List<int> blacksWithMovesIndexes;
+        private List<int> whitesWithMovesIndexes;
         private int chosenCheckerIndex = 0;
         public static int playerScore = 0;
         public static int computerScore = 0;
@@ -123,9 +126,7 @@ namespace Client
         private async void ClickAsync(object sender, EventArgs e)
         {
 
-            //GamePlayback(3003);
-
-            endGame();
+            //endGame();
 
             Button Btn = (Button)sender;
             int x, y;
@@ -167,7 +168,6 @@ namespace Client
                     to_y = y;
 
                     Board = Piece.Move(Board, from_x, from_y, to_x, to_y);
-                    //String[] playerMove = { from_x.ToString(), from_y.ToString(), to_x.ToString(), to_y.ToString() };
                     allGameMoves.Add(from_x.ToString());
                     allGameMoves.Add(from_y.ToString());
                     allGameMoves.Add(to_x.ToString());
@@ -178,21 +178,35 @@ namespace Client
                     SetUpColours();
                     ShowPieces();
 
+                    //if there is no possible steps for all white checkers --> end the game
+                    CheckIfGameEndedAfterWhite();
 
                     //gathring information of black checkers locations and possible moves.
-                    locations = GetBlackCheckersLocations();
-                    blackCheckersLocationAndMoves = GetPossibleBlackMoves(locations);
-                    blacksWithMovesIndexes = onlyBlackWithMoves(blackCheckersLocationAndMoves);
+                    blackLocations = GetBlackCheckersLocations();
+                    blackCheckersLocationAndMoves = GetPossibleBlackMoves(blackLocations);
+                    blacksWithMovesIndexes = OnlyBlackWithMoves(blackCheckersLocationAndMoves);
 
+                    //if there is no possible steps for all black checkers --> end the game
+                    if (blacksWithMovesIndexes.Count == 0)
+                    {
+                        endGame();
+                    }
                     //sending get request for server to get random num for making a random move.
                     await getPlayerWithRandAsync((int)blacksWithMovesIndexes.Count);
 
                     try
                     {
                         chosenCheckerIndex = blacksWithMovesIndexes.ElementAt(p1.Num);
-                        checkerLocation = locations.ElementAt(chosenCheckerIndex);
+                        checkerLocation = blackLocations.ElementAt(chosenCheckerIndex);
                         moveToLocation = blackCheckersLocationAndMoves.ElementAt(chosenCheckerIndex).ElementAt(0);
                         Board = Piece.Move(Board, checkerLocation[0], checkerLocation[1], moveToLocation[0], moveToLocation[1]);
+
+                        whiteLocations = GetWhiteCheckersLocations();
+                        //check whether there is any white checker on board, if not then end game
+                        if (whiteLocations.Count == 0)
+                        {
+                            endGame();
+                        }
 
                         allGameMoves.Add(checkerLocation[0].ToString());
                         allGameMoves.Add(checkerLocation[1].ToString());
@@ -217,10 +231,26 @@ namespace Client
 
         }
 
+        private void CheckIfGameEndedAfterWhite()
+        {
+            //check whether there is any black checker left on board
+            blackLocations = GetBlackCheckersLocations();
+            if (blackLocations.Count == 0)
+            {
+
+                endGame();
+            }
+            whiteLocations = GetWhiteCheckersLocations();
+            whiteCheckersLocationAndMoves = GetPossibleBlackMoves(whiteLocations);
+            whitesWithMovesIndexes = OnlyWhiteWithMoves(whiteCheckersLocationAndMoves);
+            if (whitesWithMovesIndexes.Count() == 0)
+            {
+                endGame();
+            }
+        }
+
         private async void endGame()
         {
-
-
             stopWatch.Stop();
             // Get the elapsed time as a TimeSpan value.
             TimeSpan ts = stopWatch.Elapsed;
@@ -259,7 +289,7 @@ namespace Client
             var combined = string.Join(", ", dbgm.TableGames.ToList());
             Console.WriteLine(combined);
 
-
+            this.Close();
 
         }
         private async Task LastGameIdAsync()
@@ -522,6 +552,27 @@ namespace Client
             return blackCheckersLocations;
         }
 
+        private List<int[]> GetWhiteCheckersLocations()
+        {
+            List<int[]> whiteCheckersLocations = new List<int[]>();
+            int[] location;
+
+            for (int i = 0; i < 8; i++)
+            {
+                for (int j = 0; j < 8; j++)
+                {
+                    if (Board[i, j] != null && Board[i, j].Colour == 1)
+                    {
+                        location = new int[] { i, j };
+                        whiteCheckersLocations.Add(location);
+                    }
+
+                }
+
+            }
+            return whiteCheckersLocations;
+        }
+
         private List<List<int[]>> GetPossibleBlackMoves(List<int[]> blackCheckersLocations)
         {
             List<List<int[]>> PossibleMoves = new List<List<int[]>>();
@@ -532,7 +583,7 @@ namespace Client
             }
             return PossibleMoves;
         }
-        private List<int> onlyBlackWithMoves(List<List<int[]>> blackCheckersLocationsAndMoves)
+        private List<int> OnlyBlackWithMoves(List<List<int[]>> blackCheckersLocationsAndMoves)
         {
             List<int> blacksWithMoves = new List<int>();
 
@@ -545,6 +596,20 @@ namespace Client
             }
 
             return blacksWithMoves;
+        }
+        private List<int> OnlyWhiteWithMoves(List<List<int[]>> whiteCheckersLocationsAndMoves)
+        {
+            List<int> whitesWithMoves = new List<int>();
+
+            foreach (List<int[]> black in whiteCheckersLocationsAndMoves)
+            {
+                if (black.Count() > 0)
+                {
+                    whitesWithMoves.Add(whiteCheckersLocationsAndMoves.IndexOf(black));
+                }
+            }
+
+            return whitesWithMoves;
         }
         private void moveExample()
         {
