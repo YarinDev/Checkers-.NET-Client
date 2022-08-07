@@ -120,7 +120,7 @@ namespace Client
 
 
         //happens when user is clicking on one of the board's squares, if the square is empty it means board[x,y] is null.
-        private void ClickAsync(object sender, EventArgs e)
+        private async void ClickAsync(object sender, EventArgs e)
         {
 
            // endGameAsync();
@@ -224,112 +224,39 @@ namespace Client
 
                     Console.WriteLine("player score is: " + playerScore);
                     Console.WriteLine("computer score is: " + computerScore);
-=======
-                    //Computer logic for making a move
-                    ComputerMoveAsync();
->>>>>>> 286daf9985307c0bc15e08b7ea3b6695fca7064b
                 }
 
             }
 
         }
 
-<<<<<<< HEAD
         private async Task CheckIfGameEndedAfterWhite()
-=======
-        private async void ComputerMoveAsync()
-        {
-            //gathring information of black checkers locations and possible moves.
-            blackLocations = GetBlackCheckersLocations();
-            blackCheckersLocationAndMoves = GetPossibleBlackMoves(blackLocations);
-            blacksWithMovesIndexes = OnlyBlackWithMoves(blackCheckersLocationAndMoves);
-
-           /* //if there is no possible steps for all black checkers --> end the game
-            if (blacksWithMovesIndexes.Count == 0)
-            {
-                endGameAsync();
-            }*/
-            //sending get request for server to get random num for making a random move.
-            await getPlayerWithRandAsync((int)blacksWithMovesIndexes.Count);
-
-            try
-            {
-                chosenCheckerIndex = blacksWithMovesIndexes.ElementAt(p1.Num);
-                checkerLocation = blackLocations.ElementAt(chosenCheckerIndex);
-                moveToLocation = blackCheckersLocationAndMoves.ElementAt(chosenCheckerIndex).ElementAt(0);
-                Board = Piece.Move(Board, checkerLocation[0], checkerLocation[1], moveToLocation[0], moveToLocation[1]);
-
-                UpdatePiecesTaken();
-                SetUpColours();
-                ShowPieces();
-                CheckIfGameEndedAfterBlack();
-
-
-                /*  whiteLocations = GetWhiteCheckersLocations();   
-                  //check whether there is any white checker on board, if not then end game
-                  if (whiteLocations.Count == 0)
-                  {
-                      endGameAsync();
-                  }*/
-
-                allGameMoves.Add(checkerLocation[0].ToString());
-                allGameMoves.Add(checkerLocation[1].ToString());
-                allGameMoves.Add(moveToLocation[0].ToString());
-                allGameMoves.Add(moveToLocation[1].ToString());
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-                //end game method.
-                endGameAsync();
-            }
-
-        }
-
-        private void CheckIfGameEndedAfterWhite()
->>>>>>> 286daf9985307c0bc15e08b7ea3b6695fca7064b
         {
             //check whether there is any black checker left on board
             blackLocations = GetBlackCheckersLocations();
             if (blackLocations.Count() == 0)
             {
 
-<<<<<<< HEAD
                 await endGame();
             }
-=======
-                endGameAsync();
-            }
-            //check whether there is any black checker possible Moves left on board
->>>>>>> 286daf9985307c0bc15e08b7ea3b6695fca7064b
             blackCheckersLocationAndMoves = GetPossibleBlackMoves(blackLocations);
             blacksWithMovesIndexes = OnlyBlackWithMoves(blackCheckersLocationAndMoves);
             if (blacksWithMovesIndexes.Count() == 0)
             {
-<<<<<<< HEAD
                 await endGame();
             }
 
             //////////////////////////////////////////
-=======
-                endGameAsync();
-            }
-        }
-        private void CheckIfGameEndedAfterBlack()
-        {
-            //check whether there is any white checker left on board
->>>>>>> 286daf9985307c0bc15e08b7ea3b6695fca7064b
             whiteLocations = GetWhiteCheckersLocations();
             if (whiteLocations.Count() == 0)
             {
-                endGameAsync();
+                await endGame();
             }
             //check whether there is any black checker possible Moves left on board
             whiteCheckersLocationAndMoves = GetPossibleBlackMoves(whiteLocations);
             whitesWithMovesIndexes = OnlyWhiteWithMoves(whiteCheckersLocationAndMoves);
             if (whitesWithMovesIndexes.Count() == 0)
             {
-<<<<<<< HEAD
                 await endGame();
             }
         }
@@ -361,13 +288,6 @@ namespace Client
         }
 
         private async Task endGame()
-=======
-                endGameAsync();
-            }
-        }
-
-        private async void endGameAsync()
->>>>>>> 286daf9985307c0bc15e08b7ea3b6695fca7064b
         {
             stopWatch.Stop();
             // Get the elapsed time as a TimeSpan value.
