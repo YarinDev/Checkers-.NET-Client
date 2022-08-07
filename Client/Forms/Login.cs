@@ -1,14 +1,7 @@
 ﻿using Client.Model;
-using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -17,33 +10,13 @@ namespace Client
     public partial class Login : Form
     {
         private HttpClient client = new HttpClient();
-        private BindingSource TblUsersBindingSource = new BindingSource();
         private int id;
         private String name, phone;
 
         public Login()
         {
             InitializeComponent();
-            /*            sendNumToServer(5);
-            */
         }
-
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void GetNumFromServer(int num)
-        {
-            using (var client = new HttpClient())
-            {
-                var endPoint = new Uri("https://localhost:44310/");
-                var result = client.GetAsync(endPoint).Result;
-                var json = result.Content.ReadAsStringAsync().Result;
-            }
-        }
-
-
 
 
         private void textBox1_KeyPress(object sender, KeyPressEventArgs e)
@@ -111,9 +84,6 @@ namespace Client
             p1.Name = p1.Name.ToLower().Trim();
             p1.Phone = p1.Phone.ToLower().Trim();
 
-            /*  TheGame f2 = new TheGame();
-              f2.initalizePlayer(p1);
-              f2.Show();*/
 
             if (id == p1.Id && String.Equals(name, p1.Name) && String.Equals(phone, p1.Phone))
             {
@@ -123,7 +93,7 @@ namespace Client
                 UserMenu menu = new UserMenu();
                 menu.initalizePlayer(p1);
                 menu.Show();
-               
+
             }
             else
             {
@@ -145,8 +115,6 @@ namespace Client
 
             return players;
         }
-
-
 
         private void StartGame_Load(object sender, EventArgs e)
         {

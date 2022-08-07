@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="d4a2e9aa-2c11-4034-a29b-e53e8483e9a8" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.vs/Client/v16/.suo" beforeDir="false" afterPath="$PROJECT_DIR$/.vs/Client/v16/.suo" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/Forms/TheGame.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Client/Forms/TheGame.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/MYDB.mdf" beforeDir="false" afterPath="$PROJECT_DIR$/Client/MYDB.mdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/MYDB_log.ldf" beforeDir="false" afterPath="$PROJECT_DIR$/Client/MYDB_log.ldf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/bin/Debug/Client.exe" beforeDir="false" afterPath="$PROJECT_DIR$/Client/bin/Debug/Client.exe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/bin/Debug/Client.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/Client/bin/Debug/Client.pdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/bin/Debug/MYDB.mdf" beforeDir="false" afterPath="$PROJECT_DIR$/Client/bin/Debug/MYDB.mdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/bin/Debug/MYDB_log.ldf" beforeDir="false" afterPath="$PROJECT_DIR$/Client/bin/Debug/MYDB_log.ldf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/obj/Debug/Client.csproj.FileListAbsolute.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Client/obj/Debug/Client.csproj.FileListAbsolute.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/obj/Debug/Client.csproj.GenerateResource.cache" beforeDir="false" afterPath="$PROJECT_DIR$/Client/obj/Debug/Client.csproj.GenerateResource.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/obj/Debug/Client.exe" beforeDir="false" afterPath="$PROJECT_DIR$/Client/obj/Debug/Client.exe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/obj/Debug/Client.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/Client/obj/Debug/Client.pdb" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="2D215XteMaOAZ34Zdk0I24iTECu" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="d4a2e9aa-2c11-4034-a29b-e53e8483e9a8" name="Changes" comment="" />
+      <created>1659882184386</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1659882184386</updated>
+    </task>
+    <servers />
+  </component>
+</project>

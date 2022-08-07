@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
-using System.Linq.Expressions;
 using System.Diagnostics;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -166,7 +163,7 @@ namespace Client
 
                     to_x = x;
                     to_y = y;
-
+                    ///////////////////////////////////////////////////////////////////////////////
                     Board = Piece.Move(Board, from_x, from_y, to_x, to_y);
                     allGameMoves.Add(from_x.ToString());
                     allGameMoves.Add(from_y.ToString());
@@ -179,16 +176,67 @@ namespace Client
                     ShowPieces();
 
                     //if there is no possible steps for all white checkers --> end the game
-                    CheckIfGameEndedAfterWhite();
+                    await CheckIfGameEndedAfterWhite();
 
+                    //gathring information of black checkers locations and possible moves.
+                    blackLocations = GetBlackCheckersLocations();
+                    blackCheckersLocationAndMoves = GetPossibleBlackMoves(blackLocations);
+                    blacksWithMovesIndexes = OnlyBlackWithMoves(blackCheckersLocationAndMoves);
+
+                    /*//if there is no possible steps for all black checkers --> end the game
+                    if (blacksWithMovesIndexes.Count == 0)
+                    {
+                        endGame();
+                    }*/
+                    //sending get request for server to get random num for making a random move.
+                    await getPlayerWithRandAsync((int)blacksWithMovesIndexes.Count);
+
+                    try
+                    {
+                        chosenCheckerIndex = blacksWithMovesIndexes.ElementAt(p1.Num);
+                        checkerLocation = blackLocations.ElementAt(chosenCheckerIndex);
+                        moveToLocation = blackCheckersLocationAndMoves.ElementAt(chosenCheckerIndex).ElementAt(0);
+
+                        Board = Piece.Move(Board, checkerLocation[0], checkerLocation[1], moveToLocation[0], moveToLocation[1]);
+                        allGameMoves.Add(checkerLocation[0].ToString());
+                        allGameMoves.Add(checkerLocation[1].ToString());
+                        allGameMoves.Add(moveToLocation[0].ToString());
+                        allGameMoves.Add(moveToLocation[1].ToString());
+                        UpdatePiecesTaken();
+                        SetUpColours();
+                        ShowPieces();
+
+                        await CheckIfGameEndedAfterBlack();
+                        /*  whiteLocations = GetWhiteCheckersLocations();
+                          //check whether there is any white checker on board, if not then end game
+                          if (whiteLocations.Count == 0)
+                          {
+                              endGame();
+                          }*/
+
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                        //end game method.
+                        // endGame();
+                    }
+
+                    Console.WriteLine("player score is: " + playerScore);
+                    Console.WriteLine("computer score is: " + computerScore);
+=======
                     //Computer logic for making a move
                     ComputerMoveAsync();
+>>>>>>> 286daf9985307c0bc15e08b7ea3b6695fca7064b
                 }
 
             }
 
         }
 
+<<<<<<< HEAD
+        private async Task CheckIfGameEndedAfterWhite()
+=======
         private async void ComputerMoveAsync()
         {
             //gathring information of black checkers locations and possible moves.
@@ -239,25 +287,38 @@ namespace Client
         }
 
         private void CheckIfGameEndedAfterWhite()
+>>>>>>> 286daf9985307c0bc15e08b7ea3b6695fca7064b
         {
             //check whether there is any black checker left on board
             blackLocations = GetBlackCheckersLocations();
             if (blackLocations.Count() == 0)
             {
 
+<<<<<<< HEAD
+                await endGame();
+            }
+=======
                 endGameAsync();
             }
             //check whether there is any black checker possible Moves left on board
+>>>>>>> 286daf9985307c0bc15e08b7ea3b6695fca7064b
             blackCheckersLocationAndMoves = GetPossibleBlackMoves(blackLocations);
             blacksWithMovesIndexes = OnlyBlackWithMoves(blackCheckersLocationAndMoves);
             if (blacksWithMovesIndexes.Count() == 0)
             {
+<<<<<<< HEAD
+                await endGame();
+            }
+
+            //////////////////////////////////////////
+=======
                 endGameAsync();
             }
         }
         private void CheckIfGameEndedAfterBlack()
         {
             //check whether there is any white checker left on board
+>>>>>>> 286daf9985307c0bc15e08b7ea3b6695fca7064b
             whiteLocations = GetWhiteCheckersLocations();
             if (whiteLocations.Count() == 0)
             {
@@ -268,11 +329,45 @@ namespace Client
             whitesWithMovesIndexes = OnlyWhiteWithMoves(whiteCheckersLocationAndMoves);
             if (whitesWithMovesIndexes.Count() == 0)
             {
+<<<<<<< HEAD
+                await endGame();
+            }
+        }
+
+        private async Task CheckIfGameEndedAfterBlack()
+        {
+            //check whether there is any black checker left on board
+            whiteLocations = GetWhiteCheckersLocations();
+            if (whiteLocations.Count == 0)
+            {
+
+                await endGame();
+            }
+            whiteCheckersLocationAndMoves = GetPossibleBlackMoves(whiteLocations);
+            whitesWithMovesIndexes = OnlyWhiteWithMoves(whiteCheckersLocationAndMoves);
+            if (whitesWithMovesIndexes.Count() == 0)
+            {
+                await endGame();
+            }
+
+            //////////////////////////////////////////
+            blackLocations = GetBlackCheckersLocations();
+            blackCheckersLocationAndMoves = GetPossibleBlackMoves(blackLocations);
+            blacksWithMovesIndexes = OnlyWhiteWithMoves(blackCheckersLocationAndMoves);
+            if (blacksWithMovesIndexes.Count() == 0)
+            {
+                await endGame();
+            }
+        }
+
+        private async Task endGame()
+=======
                 endGameAsync();
             }
         }
 
         private async void endGameAsync()
+>>>>>>> 286daf9985307c0bc15e08b7ea3b6695fca7064b
         {
             stopWatch.Stop();
             // Get the elapsed time as a TimeSpan value.
@@ -285,7 +380,7 @@ namespace Client
                 game.Winner = p1.Name;
                 Console.WriteLine("koko");
 
-                MessageBox.Show(p1.Name + " won!");
+                MessageBox.Show(String.Concat(p1.Name.Where(c => !Char.IsWhiteSpace(c))) + " won!");
                 await CreateGameOnServer(game);
 
                 //get most recent game GameId
@@ -634,13 +729,6 @@ namespace Client
 
             return whitesWithMoves;
         }
-        private void moveExample()
-        {
 
-            Board = Piece.Move(Board, 2, 3, 3, 2);
-            UpdatePiecesTaken();
-            SetUpColours();
-            ShowPieces();
-        }
     }
 }
