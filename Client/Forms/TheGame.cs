@@ -40,6 +40,20 @@ namespace Client
         private int[] moveToLocation;
 
 
+        private Button[,] Buttons = new Button[8, 8];
+        //initializing board teams (8 vs 8 checkers)
+        private Piece[,] Board = new Piece[8, 8];
+
+        private PictureBox[] ImagesW = new PictureBox[12];
+        private PictureBox[] ImagesB = new PictureBox[12];
+
+        private Color FirstColour = Color.Cornsilk;
+        private Color SecondColour = Color.Black;
+        private Color SelectedColour = Color.Orange;
+
+        private Boolean selected = false;
+        private int[] Piece_Selected;
+
         public TheGame()
         {
             InitializeComponent();
@@ -55,6 +69,17 @@ namespace Client
                 new MediaTypeWithQualityHeaderValue("application/json"));
 
         }
+        private void Initialize()
+        {
+            SetUpButtons();
+            SetUpColours();
+            SetUpSidePictures();
+            IntialPositions();
+            ShowPieces();
+            Debug.WriteLine("Done");
+
+            ImagesB[0].BackgroundImage = Properties.Resources.CheckerBlack1;
+        }
         public void initalizePlayer(Player player)
         {
             p1.Id = player.Id;
@@ -65,26 +90,12 @@ namespace Client
             game.Date = DateTime.Now;
             stopWatch.Start();
         }
-
+        
         protected override void OnLoad(EventArgs e)
         {
 
         }
 
-
-        private Button[,] Buttons = new Button[8, 8];
-        //initializing board teams (8 vs 8 checkers)
-        private Piece[,] Board = new Piece[8, 8];
-
-        private PictureBox[] ImagesW = new PictureBox[12];
-        private PictureBox[] ImagesB = new PictureBox[12];
-
-        private Color FirstColour = Color.Cornsilk;
-        private Color SecondColour = Color.Black;
-        private Color SelectedColour = Color.Orange;
-
-        private Boolean selected = false;
-        private int[] Piece_Selected;
 
         public async Task GamePlayback(int gameIdForPlayback)
         {
@@ -106,24 +117,9 @@ namespace Client
 
         }
 
-        private void Initialize()
-        {
-            SetUpButtons();
-            SetUpColours();
-            SetUpSidePictures();
-            IntialPositions();
-            ShowPieces();
-            Debug.WriteLine("Done");
-
-            ImagesB[0].BackgroundImage = Properties.Resources.CheckerBlack1;
-        }
-
-
         //happens when user is clicking on one of the board's squares, if the square is empty it means board[x,y] is null.
         private async void ClickAsync(object sender, EventArgs e)
         {
-
-           // endGameAsync();
 
             Button Btn = (Button)sender;
             int x, y;
@@ -163,7 +159,7 @@ namespace Client
 
                     to_x = x;
                     to_y = y;
-                    ///////////////////////////////////////////////////////////////////////////////
+
                     Board = Piece.Move(Board, from_x, from_y, to_x, to_y);
                     allGameMoves.Add(from_x.ToString());
                     allGameMoves.Add(from_y.ToString());
@@ -175,7 +171,7 @@ namespace Client
                     SetUpColours();
                     ShowPieces();
 
-                    //if there is no possible steps for all white checkers --> end the game
+                    //if there is no possible steps for all white checkers or black checkers --> end the game
                     await CheckIfGameEndedAfterWhite();
 
                     //gathring information of black checkers locations and possible moves.
@@ -183,11 +179,7 @@ namespace Client
                     blackCheckersLocationAndMoves = GetPossibleBlackMoves(blackLocations);
                     blacksWithMovesIndexes = OnlyBlackWithMoves(blackCheckersLocationAndMoves);
 
-                    /*//if there is no possible steps for all black checkers --> end the game
-                    if (blacksWithMovesIndexes.Count == 0)
-                    {
-                        endGame();
-                    }*/
+
                     //sending get request for server to get random num for making a random move.
                     await getPlayerWithRandAsync((int)blacksWithMovesIndexes.Count);
 
@@ -206,20 +198,13 @@ namespace Client
                         SetUpColours();
                         ShowPieces();
 
+                        //if there is no possible steps for all white checkers or black checkers --> end the game
                         await CheckIfGameEndedAfterBlack();
-                        /*  whiteLocations = GetWhiteCheckersLocations();
-                          //check whether there is any white checker on board, if not then end game
-                          if (whiteLocations.Count == 0)
-                          {
-                              endGame();
-                          }*/
 
                     }
                     catch (Exception ex)
                     {
                         MessageBox.Show(ex.Message);
-                        //end game method.
-                        // endGame();
                     }
 
                     Console.WriteLine("player score is: " + playerScore);
@@ -246,7 +231,6 @@ namespace Client
                 await endGame();
             }
 
-            //////////////////////////////////////////
             whiteLocations = GetWhiteCheckersLocations();
             if (whiteLocations.Count() == 0)
             {
@@ -277,7 +261,6 @@ namespace Client
                 await endGame();
             }
 
-            //////////////////////////////////////////
             blackLocations = GetBlackCheckersLocations();
             blackCheckersLocationAndMoves = GetPossibleBlackMoves(blackLocations);
             blacksWithMovesIndexes = OnlyWhiteWithMoves(blackCheckersLocationAndMoves);
@@ -332,7 +315,7 @@ namespace Client
         }
         private async Task LastGameIdAsync()
         {
-            game = await GetLastGameAsync("https://localhost:44310/api/TblGames/getlast/1");
+            game = await GetLastGameAsync("https://localhost:44310/api/TblGames/getlast");
 
         }
         async Task<Game> GetLastGameAsync(string path)
@@ -351,8 +334,6 @@ namespace Client
 
             return game;
         }
-
-
         private async Task CreateGameOnServer(Game game)
         {
             Uri response = await CreateGameAsync(game);
@@ -388,6 +369,64 @@ namespace Client
             await Task.Delay(500);
             p1 = await GetPlayerAsync("https://localhost:44310/api/TblUsers/pname/" + p1.Id + "/" + num);
 
+        }
+        private List<int[]> GetBlackCheckersLocations()
+        {
+            List<int[]> blackCheckersLocations = new List<int[]>();
+            int[] location;
+
+            for (int i = 0; i < 8; i++)
+            {
+                for (int j = 0; j < 8; j++)
+                {
+                    if (Board[i, j] != null && Board[i, j].Colour == 0)
+                    {
+                        location = new int[] { i, j };
+                        blackCheckersLocations.Add(location);
+                    }
+
+                }
+
+            }
+            return blackCheckersLocations;
+        }
+        private List<List<int[]>> GetPossibleBlackMoves(List<int[]> blackCheckersLocations)
+        {
+            List<List<int[]>> PossibleMoves = new List<List<int[]>>();
+
+            foreach (int[] location in blackCheckersLocations)
+            {
+                PossibleMoves.Add(Piece.GetLegalMoves(Board, location[0], location[1]));
+            }
+            return PossibleMoves;
+        }
+        private List<int> OnlyBlackWithMoves(List<List<int[]>> blackCheckersLocationsAndMoves)
+        {
+            List<int> blacksWithMoves = new List<int>();
+
+            foreach (List<int[]> black in blackCheckersLocationsAndMoves)
+            {
+                if (black.Count() > 0)
+                {
+                    blacksWithMoves.Add(blackCheckersLocationsAndMoves.IndexOf(black));
+                }
+            }
+
+            return blacksWithMoves;
+        }
+        private List<int> OnlyWhiteWithMoves(List<List<int[]>> whiteCheckersLocationsAndMoves)
+        {
+            List<int> whitesWithMoves = new List<int>();
+
+            foreach (List<int[]> black in whiteCheckersLocationsAndMoves)
+            {
+                if (black.Count() > 0)
+                {
+                    whitesWithMoves.Add(whiteCheckersLocationsAndMoves.IndexOf(black));
+                }
+            }
+
+            return whitesWithMoves;
         }
         public void printArray<T>(IEnumerable<T> a)
         {
@@ -569,26 +608,6 @@ namespace Client
                 }
             }
         }
-        private List<int[]> GetBlackCheckersLocations()
-        {
-            List<int[]> blackCheckersLocations = new List<int[]>();
-            int[] location;
-
-            for (int i = 0; i < 8; i++)
-            {
-                for (int j = 0; j < 8; j++)
-                {
-                    if (Board[i, j] != null && Board[i, j].Colour == 0)
-                    {
-                        location = new int[] { i, j };
-                        blackCheckersLocations.Add(location);
-                    }
-
-                }
-
-            }
-            return blackCheckersLocations;
-        }
 
         private List<int[]> GetWhiteCheckersLocations()
         {
@@ -610,45 +629,5 @@ namespace Client
             }
             return whiteCheckersLocations;
         }
-
-        private List<List<int[]>> GetPossibleBlackMoves(List<int[]> blackCheckersLocations)
-        {
-            List<List<int[]>> PossibleMoves = new List<List<int[]>>();
-
-            foreach (int[] location in blackCheckersLocations)
-            {
-                PossibleMoves.Add(Piece.GetLegalMoves(Board, location[0], location[1]));
-            }
-            return PossibleMoves;
-        }
-        private List<int> OnlyBlackWithMoves(List<List<int[]>> blackCheckersLocationsAndMoves)
-        {
-            List<int> blacksWithMoves = new List<int>();
-
-            foreach (List<int[]> black in blackCheckersLocationsAndMoves)
-            {
-                if (black.Count() > 0)
-                {
-                    blacksWithMoves.Add(blackCheckersLocationsAndMoves.IndexOf(black));
-                }
-            }
-
-            return blacksWithMoves;
-        }
-        private List<int> OnlyWhiteWithMoves(List<List<int[]>> whiteCheckersLocationsAndMoves)
-        {
-            List<int> whitesWithMoves = new List<int>();
-
-            foreach (List<int[]> black in whiteCheckersLocationsAndMoves)
-            {
-                if (black.Count() > 0)
-                {
-                    whitesWithMoves.Add(whiteCheckersLocationsAndMoves.IndexOf(black));
-                }
-            }
-
-            return whitesWithMoves;
-        }
-
     }
 }
